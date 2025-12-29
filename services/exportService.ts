@@ -68,6 +68,7 @@ const exportMarkdown = (graph: joint.dia.Graph, filename: string) => {
         const outbound = graph.getConnectedLinks(cell, { outbound: true });
         outbound.forEach(link => {
             const targetId = link.target().id;
+            if (!targetId) return;
             const target = graph.getCell(targetId);
             if (target) traverse(target, depth + 1);
         });
@@ -147,6 +148,7 @@ const exportPPTX = async (graph: joint.dia.Graph, paper: joint.dia.Paper, filena
         const outbound = graph.getConnectedLinks(cell, { outbound: true });
         outbound.forEach(link => {
             const targetId = link.target().id;
+            if (!targetId) return;
             const target = graph.getCell(targetId);
             if (target) traverse(target, depth + 1);
         });
