@@ -34,7 +34,7 @@ export interface AppState {
 }
 
 const useStore = create<AppState>((set, get) => ({
-    apiKey: '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',
+    apiKey: '',
     baseUrl: 'https://openrouter.ai/api/v1',
     modelName: 'xiaomi/mimo-v2-flash:free',
     demoMode: false,
@@ -65,10 +65,14 @@ const useStore = create<AppState>((set, get) => ({
     closeTab: (id) => set((state) => {
         if (state.tabs.length <= 1) return state; // Prevent closing last tab
         const newTabs = state.tabs.filter(t => t.id !== id);
+        const newActiveId =
+            state.activeTabId === id ? newTabs[newTabs.length - 1].id : state.activeTabId;
+        const newActiveTab = newTabs.find(t => t.id === newActiveId) ?? newTabs[0];
+
         return {
             tabs: newTabs,
-            // If we closed active tab, switch to last one
-            activeTabId: state.activeTabId === id ? newTabs[newTabs.length - 1].id : state.activeTabId
+            activeTabId: newActiveId,
+            layoutMode: newActiveTab.layoutMode,
         };
     }),
 
