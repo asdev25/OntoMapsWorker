@@ -187,14 +187,15 @@ export class GraphService {
         });
     }
 
-    getChildren(id: string): joint.dia.Cell[] {
+    getChildren(id: string): joint.dia.Element[] {
         const cell = this.graph.getCell(id);
         if (!cell) return [];
         const outboundLinks = this.graph.getConnectedLinks(cell, { outbound: true });
         return outboundLinks.map(link => {
             const targetId = link.target().id;
-            return targetId ? this.graph.getCell(targetId) : null;
-        }).filter(c => !!c) as joint.dia.Cell[];
+            const target = targetId ? this.graph.getCell(targetId) : null;
+            return target && (target.isElement() ? (target as joint.dia.Element) : null);
+        }).filter((c): c is joint.dia.Element => !!c);
     }
 
     addLink(sourceId: string | number, targetId: string | number) {
@@ -351,7 +352,7 @@ export class GraphService {
         const yBase = 400;
         const root = cells.find(c => this.graph.getConnectedLinks(c, { inbound: true }).length === 0) || cells[0];
 
-        const traverse = (node: joint.dia.Cell, level: number) => {
+        const traverse = (node: joint.dia.Element, level: number) => {
             node.position(currentX, yBase + (level % 2 === 0 ? -120 : 120) * (level > 0 ? 1 : 0));
             currentX += 280;
 
@@ -528,10 +529,10 @@ export class GraphService {
     }
 
     highlightNeighbors(nodeId: string) {
-        const cell = this.graph.getCell(nodeId);
-        if (!cell) return;
+           const cell = this.graph.getCell(nodeId);
+           if (!cell || !cell.isElement()) return;
 
-        const neighbors = this.graph.getNeighbors(cell);
+           const neighbors = this.graph.getNeighbors(cell as joint.dia.Element);
         const neighborIds = new Set(neighbors.map(n => n.id));
         neighborIds.add(cell.id);
 

@@ -19,7 +19,7 @@ export interface AppState {
     tabs: Tab[];
     activeTabId: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    addTab: (name, initialData?: any) => void;
+    addTab: (name: string, initialData?: any) => void;
     closeTab: (id: string) => void;
     setActiveTab: (id: string) => void;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
