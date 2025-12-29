@@ -16,6 +16,8 @@ export default function Canvas() {
         layoutMode, activeTabId, tabs, updateTabData, addTab, setActiveTab
     } = useStore();
 
+    const activeTab = tabs.find((t) => t.id === activeTabId);
+
     // Track previous tab to save before switching
     const prevTabRef = useRef(activeTabId);
 
@@ -295,46 +297,92 @@ export default function Canvas() {
     }, [handleExpand, handleRetract]);
 
     return (
-        <div
-            className="h-screen w-screen bg-[#1a1a1a] overflow-hidden relative cursor-grab active:cursor-grabbing"
-            onWheel={handleWheel}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-        >
-            <div ref={canvasRef} className="w-full h-full pointer-events-none [&>*]:pointer-events-auto" />
-
-            {/* D3 Style AI Content Tooltip */}
-            {hoveredNode && (
-                <div
-                    style={{ top: hoveredNode.y, left: hoveredNode.x }}
-                    className="fixed z-50 w-72 p-4 rounded-lg border border-cyan-500/50 bg-black/85 backdrop-blur-md text-cyan-50 shadow-[0_0_20px_rgba(6,182,212,0.2)] animate-in fade-in zoom-in-95 duration-200"
-                >
-                    <h4 className="font-bold text-lg text-cyan-400 mb-2 border-b border-cyan-500/30 pb-2">
-                        {hoveredNode.label}
-                    </h4>
-                    <div className="text-xs text-neutral-300 leading-relaxed">
-                        <span className="text-cyan-500/70 font-semibold text-[10px] uppercase tracking-wider mb-1 block">
-                            AI Generated Insight
-                        </span>
-                        {hoveredNode.desc}
+        <div className="h-full w-full flex flex-col bg-background text-foreground">
+            <header className="flex items-center justify-between h-12 border-b border-border bg-background/95 backdrop-blur px-3">
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-2">
+                        <div className="h-7 w-7 rounded-md bg-primary/10 flex items-center justify-center text-[10px] font-semibold text-primary">
+                            OM
+                        </div>
+                        <div className="flex flex-col leading-tight">
+                            <span className="text-xs font-medium">Ontomaps</span>
+                            <span className="text-[10px] text-muted-foreground">AI mind canvas</span>
+                        </div>
+                    </div>
+                    <div className="hidden md:flex items-center pl-4 border-l border-border text-xs text-muted-foreground truncate">
+                        {activeTab?.name ?? 'Untitled mission'}
                     </div>
                 </div>
-            )}
 
-            {/* UI Overlays */}
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40">
-                <MissionTabs />
-            </div>
-            <div className="absolute top-4 right-4 z-40">
-                <SettingsModal />
-            </div>
-            <div className="absolute top-4 left-4 z-40">
-                <ControlPanel />
-            </div>
-            <div className="absolute bottom-4 right-4 z-40">
-                <ExportMenu />
+                <div className="flex-1 flex justify-center px-4">
+                    <MissionTabs />
+                </div>
+
+                <div className="flex items-center gap-2">
+                    <ExportMenu />
+                    <SettingsModal />
+                </div>
+            </header>
+
+            <div className="flex flex-1 overflow-hidden">
+                <aside className="hidden md:flex w-72 border-r border-border bg-background/95 flex-col">
+                    <div className="px-3 py-2 border-b border-border text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                        Mission setup
+                    </div>
+                    <div className="flex-1 overflow-auto px-3 py-3">
+                        <ControlPanel />
+                    </div>
+                </aside>
+
+                <main
+                    className="relative flex-1 bg-[#111827] cursor-grab active:cursor-grabbing"
+                    onWheel={handleWheel}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                >
+                    <div className="absolute inset-0">
+                        <div ref={canvasRef} className="w-full h-full pointer-events-none [&>*]:pointer-events-auto" />
+                    </div>
+
+                    {hoveredNode && (
+                        <div
+                            style={{ top: hoveredNode.y, left: hoveredNode.x }}
+                            className="fixed z-50 w-72 p-3 rounded-md border border-border bg-popover/95 backdrop-blur text-xs shadow-lg"
+                        >
+                            <h4 className="font-medium text-sm mb-1">
+                                {hoveredNode.label}
+                            </h4>
+                            <div className="text-[11px] text-muted-foreground leading-relaxed">
+                                <span className="block text-[10px] font-medium uppercase tracking-wide mb-1 text-primary">
+                                    AI insight
+                                </span>
+                                {hoveredNode.desc}
+                            </div>
+                        </div>
+                    )}
+                </main>
+
+                <aside className="hidden lg:flex w-80 border-l border-border bg-background/95 flex-col">
+                    <div className="px-3 py-2 border-b border-border text-[11px] font-medium text-muted-foreground uppercase tracking-wide flex items-center justify-between">
+                        <span>Layout</span>
+                        <span className="text-[10px] text-muted-foreground">
+                            {layoutMode}
+                        </span>
+                    </div>
+                    <div className="flex-1 overflow-auto px-3 py-3 text-[11px] text-muted-foreground space-y-3">
+                        <p>
+                            Use Mission setup to generate your initial concept, then drag nodes
+                            around the canvas. The layout mode changes how the map is arranged,
+                            similar to frames in Figma.
+                        </p>
+                        <p>
+                            You can switch layouts at any time without losing structure. Exports
+                            are available from the top right.
+                        </p>
+                    </div>
+                </aside>
             </div>
         </div>
     );

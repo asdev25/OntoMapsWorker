@@ -55,7 +55,7 @@ export function ControlPanel() {
     }
 
     return (
-        <Card className="w-80 hud-panel bg-black/90 p-0 border-0">
+        <Card className="w-full hud-panel p-0 border-0">
             <CardContent className="p-4 flex flex-col gap-4">
                 <div className="flex items-center justify-between border-b border-primary/30 pb-2">
                     <h2 className="font-mono text-sm font-bold text-primary flex items-center gap-2 tracking-widest uppercase">

@@ -126,36 +126,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground tracking-wide;
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    font-family: var(--font-mono); /* Force mono/technical font */
+    @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans);
   }
   
-  /* Tactical blur & glass */
   .hud-panel {
-    @apply bg-black/60 backdrop-blur-md border border-white/10 shadow-[0_0_15px_rgba(0,0,0,0.5)];
-    clip-path: polygon(
-      0 0, 
-      100% 0, 
-      100% calc(100% - 12px), 
-      calc(100% - 12px) 100%, 
-      0 100%
-    ); /* Chamfered corner bottom-right */
+    @apply bg-zinc-900/95 backdrop-blur border border-zinc-800 shadow-sm rounded-md;
   }
 
   .hud-btn {
-    @apply relative overflow-hidden bg-white/5 hover:bg-white/10 border-l-2 border-primary text-primary-foreground transition-all duration-200 uppercase tracking-widest text-xs font-bold py-2 px-4;
+    @apply inline-flex items-center justify-center rounded-md bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-xs font-medium text-foreground px-3 py-1.5 transition-colors;
   }
   
   .hud-btn:active {
-    @apply bg-primary/20 scale-[0.98];
+    @apply scale-95;
   }
 
   .hud-btn::after {
-    content: '';
-    @apply absolute top-0 right-0 w-2 h-2 border-t border-r border-white/30;
+    content: none;
   }
 }
