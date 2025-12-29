@@ -14,7 +14,7 @@ export const MissionTabs = () => {
     };
 
     return (
-        <div className="flex items-center gap-1 h-10 bg-black/80 backdrop-blur-md border-b border-white/10 px-2 font-mono select-none overflow-x-auto w-full max-w-[calc(100vw-400px)] scrollbar-none">
+        <div className="flex items-center gap-1 h-9 px-1 font-mono select-none overflow-x-auto max-w-full scrollbar-none">
             {tabs.map((tab) => {
                 const isActive = tab.id === activeTabId;
                 return (
@@ -22,21 +22,18 @@ export const MissionTabs = () => {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`
-                            relative flex items-center gap-2 px-4 h-8 text-xs cursor-pointer transition-all border-t-2 clip-path-slant
+                            flex items-center gap-2 px-3 h-7 rounded-md text-xs cursor-pointer transition-colors
                             ${isActive
-                                ? 'bg-primary/20 border-primary text-white font-bold'
-                                : 'bg-white/5 border-transparent text-neutral-500 hover:text-neutral-300 hover:bg-white/10'}
+                                ? 'bg-zinc-800 text-foreground'
+                                : 'text-muted-foreground hover:bg-zinc-800/60'}
                         `}
-                        style={{
-                            clipPath: 'polygon(0 0, 100% 0, 95% 100%, 5% 100%)'
-                        }}
                     >
-                        <FileText className={`w-3 h-3 ${isActive ? 'text-primary' : 'text-neutral-600'}`} />
+                        <FileText className={`w-3 h-3 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
 
                         {editingId === tab.id ? (
                             <input
                                 autoFocus
-                                className="bg-transparent border-none outline-none w-20 text-center uppercase tracking-wider"
+                                className="bg-transparent border-none outline-none w-24 text-center text-xs"
                                 value={tab.name}
                                 onChange={(e) => updateTabName(tab.id, e.target.value)}
                                 onBlur={() => setEditingId(null)}
@@ -45,7 +42,7 @@ export const MissionTabs = () => {
                         ) : (
                             <span
                                 onDoubleClick={() => setEditingId(tab.id)}
-                                className="uppercase tracking-wider"
+                                className="truncate max-w-[120px]"
                             >
                                 {tab.name}
                             </span>
@@ -66,7 +63,7 @@ export const MissionTabs = () => {
 
             <button
                 onClick={handleAdd}
-                className="flex items-center justify-center w-8 h-8 ml-2 text-neutral-500 hover:text-primary hover:bg-primary/10 rounded transition-colors"
+                className="flex items-center justify-center w-7 h-7 ml-1 rounded-md border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary transition-colors"
                 title="New Operation"
             >
                 <Plus className="w-4 h-4" />
